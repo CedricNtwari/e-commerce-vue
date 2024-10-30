@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ComputedRef } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 
 const currentYear: number = new Date().getFullYear()
 const copyrightYear: ComputedRef<string> = computed(
