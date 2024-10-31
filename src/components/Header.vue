@@ -39,7 +39,7 @@ const isMenuOpen = ref<boolean>(false)
 
 const isMobile = ref<boolean>(window.innerWidth < 768)
 
-function updateIsMobile(): void {
+const updateIsMobile = (): void => {
   isMobile.value = window.innerWidth < 768
   if (!isMobile.value) {
     isMenuOpen.value = false
