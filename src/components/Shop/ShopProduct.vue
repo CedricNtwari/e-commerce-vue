@@ -40,8 +40,9 @@ const emit = defineEmits<{
   &-image {
     border-top-right-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     height: 250px;
   }
 }
