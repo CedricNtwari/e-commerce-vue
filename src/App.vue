@@ -22,6 +22,10 @@ const addProductToProduct = (productId: number): void => {
     state.cart.push({ ...product })
   }
 }
+
+const removeProductFromCart = (productId: number): void => {
+  state.cart = state.cart.filter(product => product.id !== productId)
+}
 </script>
 
 <template>
@@ -32,7 +36,11 @@ const addProductToProduct = (productId: number): void => {
       @add-product-to-cart="addProductToProduct"
       class="shop"
     />
-    <Cart :cart="state.cart" class="cart b3" />
+    <Cart
+      @remove-product-from-cart="removeProductFromCart"
+      :cart="state.cart"
+      class="cart b3"
+    />
     <TheFooter class="footer b4" />
   </div>
 </template>
