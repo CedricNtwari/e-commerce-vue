@@ -32,7 +32,7 @@ const addProductToProduct = (productId: number): void => {
       @add-product-to-cart="addProductToProduct"
       class="shop"
     />
-    <Cart class="cart b3" />
+    <Cart :cart="state.cart" class="cart b3" />
     <TheFooter class="footer b4" />
   </div>
 </template>
