@@ -5,26 +5,35 @@ import Shop from './components/Shop/Shop.vue'
 import Cart from './components/Cart/Cart.vue'
 import data from './data/products'
 import { reactive } from 'vue'
-import type { ProductInterface } from './interfaces/product.interface'
+import type { ProductInterface, ProductCartInterface } from './interfaces/index'
 
 const state = reactive<{
   products: ProductInterface[]
-  cart: ProductInterface[]
+  cart: ProductCartInterface[]
 }>({
   products: data,
   cart: [],
 })
 
-const addProductToProduct = (productId: number): void => {
+const addProductToCart = (productId: number): void => {
   const product = state.products.find(product => product.id === productId)
-
-  if (product && !state.cart.find(item => item.id === productId)) {
-    state.cart.push({ ...product })
+  if (product) {
+    const productInCart = state.cart.find(product => product.id === productId)
+    if (productInCart) {
+      productInCart.quantity++
+    } else {
+      state.cart.push({ ...product, quantity: 1 })
+    }
   }
 }
 
 const removeProductFromCart = (productId: number): void => {
-  state.cart = state.cart.filter(product => product.id !== productId)
+  const productFromCart = state.cart.find(product => product.id === productId)
+  if (productFromCart?.quantity === 1) {
+    state.cart = state.cart.filter(product => product.id !== productId)
+  } else {
+    productFromCart.quantity--
+  }
 }
 </script>
 
@@ -33,7 +42,7 @@ const removeProductFromCart = (productId: number): void => {
     <TheHeader class="header b1" />
     <Shop
       :products="state.products"
-      @add-product-to-cart="addProductToProduct"
+      @add-product-to-cart="addProductToCart"
       class="shop"
     />
     <Cart
@@ -59,7 +68,6 @@ const removeProductFromCart = (productId: number): void => {
   grid-template-columns: 75% 25%;
   grid-template-rows: 48px auto 48px;
 
-  // Styles for desktop
   .header {
     grid-area: header;
   }
@@ -76,7 +84,6 @@ const removeProductFromCart = (productId: number): void => {
   }
 }
 
-// Media query for responsive layout
 @media (max-width: 768px) {
   .app-container {
     grid-template-areas:
@@ -94,3 +101,4 @@ const removeProductFromCart = (productId: number): void => {
   }
 }
 </style>
+
