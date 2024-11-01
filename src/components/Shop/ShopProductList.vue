@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ShopProduct from './ShopProduct.vue'
-import type { ProductInterface } from '../../interfaces/product.interface'
+import type { ProductInterface } from '../../interfaces/index'
 
 defineProps<{ products: ProductInterface[] }>()
 

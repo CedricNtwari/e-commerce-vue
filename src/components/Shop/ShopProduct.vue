@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProductInterface } from '../../interfaces/product.interface'
+import type { ProductInterface } from '../../interfaces/index'
 
 defineProps<{
   product: ProductInterface
