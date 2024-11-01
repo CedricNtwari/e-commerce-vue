@@ -29,10 +29,12 @@ const addProductToCart = (productId: number): void => {
 
 const removeProductFromCart = (productId: number): void => {
   const productFromCart = state.cart.find(product => product.id === productId)
-  if (productFromCart?.quantity === 1) {
-    state.cart = state.cart.filter(product => product.id !== productId)
-  } else {
-    productFromCart.quantity--
+  if (productFromCart) {
+    if (productFromCart?.quantity === 1) {
+      state.cart = state.cart.filter(product => product.id !== productId)
+    } else {
+      productFromCart.quantity--
+    }
   }
 }
 </script>
