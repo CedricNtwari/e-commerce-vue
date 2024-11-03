@@ -4,7 +4,7 @@ import TheFooter from './components/Footer.vue'
 import Shop from './components/Shop/Shop.vue'
 import Cart from './components/Cart/Cart.vue'
 import data from './data/products'
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import type { ProductInterface, ProductCartInterface } from './interfaces/index'
 
 const state = reactive<{
@@ -37,10 +37,12 @@ const removeProductFromCart = (productId: number): void => {
     }
   }
 }
+
+const cartEmpty = computed(() => state.cart.length === 0)
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="app-container" :class="{ gridEmpty: cartEmpty }">
     <TheHeader class="header b1" />
     <Shop
       :products="state.products"
@@ -48,6 +50,7 @@ const removeProductFromCart = (productId: number): void => {
       class="shop"
     />
     <Cart
+      v-if="!cartEmpty"
       @remove-product-from-cart="removeProductFromCart"
       :cart="state.cart"
       class="cart b3"
@@ -57,8 +60,8 @@ const removeProductFromCart = (productId: number): void => {
 </template>
 
 <style lang="scss">
-@use './assets/base.scss' as *;
-@use './assets/debug.scss' as *;
+@use './assets/scss/base.scss' as *;
+@use './assets/scss/debug.scss' as *;
 
 .app-container {
   min-height: 100vh;
@@ -84,6 +87,14 @@ const removeProductFromCart = (productId: number): void => {
   .footer {
     grid-area: footer;
   }
+}
+
+.gridEmpty {
+  grid-template-areas:
+    'header'
+    'shop'
+    'footer';
+  grid-template-columns: 100%;
 }
 
 @media (max-width: 768px) {
