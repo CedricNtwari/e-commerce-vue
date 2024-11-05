@@ -31,19 +31,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Clear npm cache
+        run: npm cache clean --force
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          # Unique cache key to ensure that caching works efficiently and clears when dependencies change
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'
+      - name: List interfaces directory
+        run: ls -R src/interfaces
 
       - name: Install dependencies
         run: npm ci
