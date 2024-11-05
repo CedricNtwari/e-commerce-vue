@@ -19,7 +19,7 @@ const emit = defineEmits<{
       class="btn btn-danger"
       @click="emit('removeProductFromCart', product.id)"
     >
-      Supprimer
+      Remove
     </button>
   </div>
 </template>

@@ -25,7 +25,7 @@ const emit = defineEmits<{
           class="btn btn-primary"
           @click="emit('addProductToCart', product.id)"
         >
-          Ajouter au panier
+          Add to Cart
         </button>
       </div>
     </div>
