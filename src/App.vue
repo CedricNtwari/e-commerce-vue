@@ -5,7 +5,7 @@ import Shop from './components/Shop/Shop.vue'
 import Cart from './components/Cart/Cart.vue'
 import data from './data/products'
 import { reactive, computed } from 'vue'
-import type { ProductInterface, ProductCartInterface, FiltersInterface, FilterInterface } from './interfaces'
+import type { ProductInterface, ProductCartInterface, FiltersInterface, FilterUpdate } from '@/interfaces'
 import { DEFAULT_FILTERS } from './data/filters'
 
 const state = reactive<{
@@ -58,7 +58,7 @@ const filteredProducts= computed(() => {
   })
 })
 
-const updateFilter = (filterUpdate: FilterInterface) => {
+const updateFilter = (filterUpdate: FilterUpdate) => {
   if (filterUpdate.search !== undefined) {
     state.filters.search = filterUpdate.search;
   } else if (filterUpdate.priceRange) {
@@ -77,8 +77,10 @@ const updateFilter = (filterUpdate: FilterInterface) => {
   <div class="app-container" :class="{ gridEmpty: cartEmpty }">
     <TheHeader class="header b1" />
     <Shop @update-filter="updateFilter"
-      :products="filteredProducts"
-      @add-product-to-cart="addProductToCart"
+         @add-product-to-cart="addProductToCart"
+        :products="filteredProducts"
+        :filters="state.filters"
+
       class="shop"
     />
     <Cart
