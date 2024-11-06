@@ -3,7 +3,7 @@ import { computed, type ComputedRef } from 'vue'
 
 const currentYear: number = new Date().getFullYear()
 const copyrightYear: ComputedRef<string> = computed(
-  () => `2012 - ${currentYear}`
+  () => `2012 - ${currentYear}`,
 )
 </script>
 

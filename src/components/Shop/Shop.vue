@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import ShopProductList from './ShopProductList.vue'
-import ShopFilters from './ShopFilters.vue';
-import type { ProductInterface, FilterUpdate, FiltersInterface } from '@/interfaces'
+import ShopFilters from './ShopFilters.vue'
+import type {
+  ProductInterface,
+  FilterUpdate,
+  FiltersInterface,
+} from '@/interfaces'
 
 defineProps<{
-  products: ProductInterface[],
+  products: ProductInterface[]
   filters: FiltersInterface
- }>()
+}>()
 
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: number): void
@@ -16,9 +20,13 @@ const emit = defineEmits<{
 
 <template>
   <div class="shop-container d-flex flex-row">
-    <ShopFilters :filters="filters" @update-filter="emit('updateFilter', $event)" class="shop-filter"/>
+    <ShopFilters
+      :filters="filters"
+      @update-filter="emit('updateFilter', $event)"
+      class="shop-filter"
+    />
     <ShopProductList
-    class="flex-fill"
+      class="flex-fill"
       :products="products"
       @add-product-to-cart="emit('addProductToCart', $event)"
     />
@@ -26,12 +34,12 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
-.shop-filter{
+.shop-filter {
   flex: 0 0 200px;
 }
 @media (max-width: 768px) {
   .shop-container {
     flex-direction: column;
   }
- }
+}
 </style>

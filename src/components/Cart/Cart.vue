@@ -10,7 +10,7 @@ const props = defineProps<{
 const totalPrice = computed(() =>
   props.cart.reduce((acc, product) => {
     return acc + product.price * product.quantity
-  }, 0)
+  }, 0),
 )
 
 const emit = defineEmits<{
