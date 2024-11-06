@@ -3,6 +3,7 @@ import type { Category, FiltersInterface, FilterUpdate } from '@/interfaces'
 
 defineProps<{
   filters: FiltersInterface
+  productResults: number
 }>()
 
 const emits = defineEmits<{
@@ -11,7 +12,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <div class="p-20">
+  <div class="p-20 d-flex flex-column">
     <section class="mb-20">
       <h3 class="mb-10">Search</h3>
       <input
@@ -59,7 +60,7 @@ const emits = defineEmits<{
         </label>
       </div>
     </section>
-    <section class="mb-20">
+    <section class="mb-20 flex-fill">
       <h3 class="mb-10">Sort by category</h3>
       <p
         class="category"
@@ -76,6 +77,12 @@ const emits = defineEmits<{
         {{ category }}
       </p>
     </section>
+    <small class="mb-10"
+      ><strong> {{ productResults }}</strong> Results</small
+    >
+    <button class="btn btn-danger" @click="emits('updateFilter', {})">
+      Clear filters
+    </button>
   </div>
 </template>
 
