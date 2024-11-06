@@ -1,24 +1,65 @@
 <script setup lang="ts">
-import type { FiltersInterface, FilterUpdate } from '@/interfaces';
+import type { FiltersInterface, FilterUpdate } from '@/interfaces'
 
 defineProps<{
-   filters:FiltersInterface
+  filters: FiltersInterface
 }>()
 
 const emits = defineEmits<{
   (e: 'updateFilter', updateFilter: FilterUpdate): void
 }>()
-
 </script>
 
 <template>
   <div class="p-20">
-<section class="mb-20">
-  <h3 class="mb-10">Search</h3>
-  <input :value="filters.search" @input="emits('updateFilter', {search: ($event.target as HTMLInputElement).value })" type="text" placeholder="Search...">
-</section>
+    <section class="mb-20">
+      <h3 class="mb-10">Search</h3>
+      <input
+        :value="filters.search"
+        @input="
+          emits('updateFilter', {
+            search: ($event.target as HTMLInputElement).value,
+          })
+        "
+        type="text"
+        placeholder="Search..."
+      />
+    </section>
+    <section class="mb-20">
+      <h3 class="mb-10">Sort by price</h3>
+      <div
+        class="mb-5"
+        v-for="priceRange of [
+          [0, 10000],
+          [800, 1000],
+          [1000, 1500],
+          [1500, 2000],
+          [2000, 10000],
+        ] as [number, number][]"
+        :key="priceRange + ''"
+      >
+        <input
+          type="radio"
+          name="priceRange"
+          :id="priceRange[0] + ''"
+          :checked="
+            filters.priceRange[0] === priceRange[0] &&
+            filters.priceRange[1] === priceRange[1]
+          "
+          @input="emits('updateFilter', { priceRange })"
+        />
+        <label :for="priceRange[0].toString()">
+          {{
+            priceRange[0] === 0
+              ? 'All price'
+              : priceRange[0] === 2000
+                ? 'More than 2000€'
+                : `${priceRange[0]}€ - ${priceRange[1]}€`
+          }}
+        </label>
+      </div>
+    </section>
   </div>
-
 </template>
 
 <style lang="scss" scoped></style>
