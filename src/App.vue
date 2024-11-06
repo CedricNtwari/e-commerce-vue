@@ -5,7 +5,7 @@ import Shop from './components/Shop/Shop.vue'
 import Cart from './components/Cart/Cart.vue'
 import data from './data/products'
 import { reactive, computed } from 'vue'
-import type { ProductInterface, ProductCartInterface, FiltersInterface } from './interfaces'
+import type { ProductInterface, ProductCartInterface, FiltersInterface, FilterInterface } from './interfaces'
 import { DEFAULT_FILTERS } from './data/filters'
 
 const state = reactive<{
@@ -15,7 +15,7 @@ const state = reactive<{
 }>({
   products: data,
   cart: [],
-  filters:DEFAULT_FILTERS
+  filters:{...DEFAULT_FILTERS}
 })
 
 const addProductToCart = (productId: number): void => {
@@ -42,13 +42,42 @@ const removeProductFromCart = (productId: number): void => {
 }
 
 const cartEmpty = computed(() => state.cart.length === 0)
+
+const filteredProducts= computed(() => {
+  return state.products.filter((product)=>{
+    if(
+      product.title.toLocaleLowerCase().startsWith(state.filters.search.toLocaleLowerCase()) &&
+      product.price >= state.filters.priceRange[0]&&
+      product.price <= state.filters.priceRange[1]&&
+      (product.category === state.filters.category || state.filters.category === "all")
+    ){
+      return true
+    }else {
+      return false
+    }
+  })
+})
+
+const updateFilter = (filterUpdate: FilterInterface) => {
+  if (filterUpdate.search !== undefined) {
+    state.filters.search = filterUpdate.search;
+  } else if (filterUpdate.priceRange) {
+    state.filters.priceRange = filterUpdate.priceRange;
+  } else if (filterUpdate.category) {
+    state.filters.category = filterUpdate.category;
+  } else {
+    state.filters = { ...DEFAULT_FILTERS };
+  }
+}
+
+
 </script>
 
 <template>
   <div class="app-container" :class="{ gridEmpty: cartEmpty }">
     <TheHeader class="header b1" />
-    <Shop
-      :products="state.products"
+    <Shop @update-filter="updateFilter"
+      :products="filteredProducts"
       @add-product-to-cart="addProductToCart"
       class="shop"
     />

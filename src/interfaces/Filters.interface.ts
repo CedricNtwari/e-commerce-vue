@@ -5,3 +5,9 @@ export interface FiltersInterface {
   priceRange: [number, number]
   category: Category
 }
+
+export interface FilterInterface {
+  search?: string
+  priceRange?: [number, number]
+  category?: Category
+}
