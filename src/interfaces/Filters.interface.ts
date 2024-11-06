@@ -6,7 +6,7 @@ export interface FiltersInterface {
   category: Category
 }
 
-export interface FilterInterface {
+export interface FilterUpdate {
   search?: string
   priceRange?: [number, number]
   category?: Category
