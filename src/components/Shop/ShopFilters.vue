@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FiltersInterface, FilterUpdate } from '@/interfaces'
+import type { Category, FiltersInterface, FilterUpdate } from '@/interfaces'
 
 defineProps<{
   filters: FiltersInterface
@@ -59,7 +59,37 @@ const emits = defineEmits<{
         </label>
       </div>
     </section>
+    <section class="mb-20">
+      <h3 class="mb-10">Sort by category</h3>
+      <p
+        class="category"
+        :class="{ selected: filters.category === category }"
+        v-for="category in [
+          'all',
+          'desktop',
+          'gamer',
+          'streaming',
+        ] as Category[]"
+        :key="category"
+        @click="emits('updateFilter', { category })"
+      >
+        {{ category }}
+      </p>
+    </section>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.category {
+  font-size: 14px;
+  line-height: 18px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.selected {
+  font-weight: bold;
+  text-decoration: underline;
+}
+</style>
