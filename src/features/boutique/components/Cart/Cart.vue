@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CartProductList from './CartProductList.vue'
-import type { ProductCartInterface } from '../../interfaces'
+import type { ProductCartInterface } from '@/interfaces'
 import { computed } from 'vue'
 
 const props = defineProps<{
