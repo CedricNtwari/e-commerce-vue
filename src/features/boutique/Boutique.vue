@@ -95,7 +95,7 @@ const updateFilter = (filterUpdate: FilterUpdate) => {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .boutique-container {
   display: grid;
   grid-template-columns: 75% 25%;

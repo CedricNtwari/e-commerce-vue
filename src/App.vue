@@ -2,13 +2,31 @@
 import TheHeader from './components/Header.vue'
 import TheFooter from './components/Footer.vue'
 import Boutique from './features/boutique/Boutique.vue'
+import Admin from './features/admin/Admin.vue'
+import { reactive, type Component } from 'vue'
+import type { Page } from '@/interfaces'
+
+const state = reactive<{
+  page: Page
+}>({
+  page: 'Boutique',
+})
+
+const pages: { [s: string]: Component } = {
+  Boutique,
+  Admin,
+}
+
+const navigate = (page: Page): void => {
+  state.page = page
+}
 </script>
 
 <template>
-  <div>
-    <TheHeader class="header b1" />
+  <div class="app-container">
+    <TheHeader @navigate="navigate" :page="state.page" class="header b1" />
     <div class="app-content">
-      <Component :is="Boutique" />
+      <Component :is="pages[state.page]" />
     </div>
     <TheFooter class="footer b4" />
   </div>
@@ -25,7 +43,7 @@ import Boutique from './features/boutique/Boutique.vue'
     'header'
     'app-content'
     'footer';
-  grid-template-columns: 75% 25%;
+
   grid-template-rows: 48px auto 48px;
 
   .header {
@@ -34,11 +52,7 @@ import Boutique from './features/boutique/Boutique.vue'
   .app-content {
     grid-area: app-content;
   }
-  .cart {
-    grid-area: cart;
-    border-left: var(--border);
-    background-color: white;
-  }
+
   .footer {
     grid-area: footer;
   }
@@ -47,7 +61,7 @@ import Boutique from './features/boutique/Boutique.vue'
 .gridEmpty {
   grid-template-areas:
     'header'
-    'shop'
+    'app-content'
     'footer';
   grid-template-columns: 100%;
 }
@@ -56,16 +70,9 @@ import Boutique from './features/boutique/Boutique.vue'
   .app-container {
     grid-template-areas:
       'header'
-      'shop'
-      'cart'
+      'app-content'
       'footer';
     grid-template-columns: 1fr;
-    grid-template-rows: 48px auto auto 48px;
-  }
-
-  .cart {
-    border-left: none;
-    border-top: var(--border);
   }
 }
 </style>

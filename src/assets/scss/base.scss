@@ -39,6 +39,7 @@ img {
 a {
   color: var(--text-color);
   text-decoration: none;
+  cursor: pointer;
 }
 body {
   padding: 0;
@@ -170,4 +171,11 @@ input {
   &:hover {
     background-color: var(--sucess-2);
   }
+}
+
+.card {
+  border: var(--border);
+  border-radius: var(--border-radius);
+  background-color: white;
+  padding: 30px;
 }

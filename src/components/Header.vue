@@ -21,8 +21,22 @@
       }"
     >
       <ul class="d-flex flex-row left-links">
-        <li><a class="px-10" href="#">Shop</a></li>
-        <li><a class="px-10" href="#">Admin</a></li>
+        <li>
+          <a
+            :class="{ active: page === 'Boutique' }"
+            @click="emit('navigate', 'Boutique')"
+            class="px-10"
+            >Boutique</a
+          >
+        </li>
+        <li>
+          <a
+            :class="{ active: page === 'Admin' }"
+            @click="emit('navigate', 'Admin')"
+            class="px-10"
+            >Admin</a
+          >
+        </li>
       </ul>
       <ul class="d-flex flex-row right-links">
         <li><a class="px-10" href="#">Register</a></li>
@@ -33,7 +47,16 @@
 </template>
 
 <script setup lang="ts">
+import type { Page } from '@/interfaces'
 import { ref, onMounted, onUnmounted } from 'vue'
+
+defineProps<{
+  page: Page
+}>()
+
+const emit = defineEmits<{
+  (e: 'navigate', page: Page): void
+}>()
 
 const isMenuOpen = ref<boolean>(false)
 
@@ -124,6 +147,10 @@ onUnmounted(() => {
 
 li a {
   color: var(--text-primary-color);
+}
+
+.active {
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

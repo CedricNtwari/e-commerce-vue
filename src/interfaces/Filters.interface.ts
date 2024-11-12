@@ -1,5 +1,4 @@
-export type Category = 'gamer' | 'desktop' | 'streaming' | 'all'
-
+import type { Category } from './types'
 export interface FiltersInterface {
   search: string
   priceRange: [number, number]
