@@ -14,7 +14,10 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "vue": "^3.5.12"
+    "@vee-validate/zod": "^4.14.7",
+    "vee-validate": "^4.14.7",
+    "vue": "^3.5.12",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
