@@ -98,7 +98,7 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 47px;
+  top: 31px;
   left: 0;
   right: 0;
   background-color: var(--primary-1);
