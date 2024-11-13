@@ -22,6 +22,12 @@ This project is a desktop(just for now)-oriented e-commerce website that display
 - **Vite** - For faster build and development process
 - **SCSS** - For modular and reusable styling
 
+## API Integration
+
+The platform uses https://restapi.fr/api/projetproducts to store and retrieve product data. This is a free REST API service that holds the data temporarily.
+
+Note: Since this is a free service, data (including products) is only stored for up to 10 hours. This means that product information may be cleared after this period, requiring re-seeding or re-adding of products for consistent data display.
+
 ## Project Setup
 
 ```sh
