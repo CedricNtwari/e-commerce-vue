@@ -21,22 +21,21 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
+@use '../../../../assets/scss/mixins' as m;
+
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-auto-rows: 300px;
-  gap: 20px;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  @media (max-width: 768px) {
+  grid-template-columns: 1fr;
+  @include m.md {
     grid-template-columns: 1fr 1fr;
   }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
+  @include m.lg {
+    grid-template-columns: 1fr 1fr 1fr;
   }
+  @include m.xl {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  grid-auto-rows: 400px;
+  gap: 20px;
 }
 </style>

@@ -42,7 +42,7 @@ const navigate = (page: Page): void => {
 @use './assets/scss/debug.scss' as *;
 
 .app-container {
-  min-height: 100vh;
+  height: 100vh;
   display: grid;
   grid-template-areas:
     'header'
