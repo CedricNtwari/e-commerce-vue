@@ -2,6 +2,12 @@
 import { useForm, useField } from 'vee-validate'
 import { z } from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
+import { onMounted, ref } from 'vue'
+
+const firstInput = ref<HTMLInputElement | null>(null)
+onMounted(() => {
+  firstInput.value?.focus()
+})
 
 const required = { required_error: 'Must not be empty!' }
 const validationSchema = toTypedSchema(
@@ -32,8 +38,20 @@ const price = useField('price')
 const description = useField('description')
 const category = useField('category')
 
-const trySubmit = handleSubmit(formValues => {
-  console.log(formValues)
+const trySubmit = handleSubmit(async (formValues, { resetForm }) => {
+  try {
+    await fetch('https://restapi.fr/api/projetproducts', {
+      method: 'POST',
+      body: JSON.stringify(formValues),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    resetForm()
+    firstInput.value?.focus()
+  } catch (e) {
+    console.log(e)
+  }
 })
 </script>
 
@@ -43,7 +61,7 @@ const trySubmit = handleSubmit(formValues => {
     <form @submit="trySubmit">
       <div class="d-flex flex-column mb-20">
         <label class="mb-5">*Title</label>
-        <input v-model="title.value.value" type="text" />
+        <input ref="firstInput" v-model="title.value.value" type="text" />
         <small class="form-error" v-if="title.errorMessage.value">{{
           title.errorMessage.value
         }}</small>
