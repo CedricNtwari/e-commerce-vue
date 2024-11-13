@@ -29,7 +29,9 @@ const navigate = (page: Page): void => {
   <div class="app-container">
     <TheHeader @navigate="navigate" :page="state.page" class="header b1" />
     <div class="app-content">
-      <Component :is="pages[state.page]" />
+      <Suspense>
+        <Component :is="pages[state.page]" />
+      </Suspense>
     </div>
     <TheFooter class="footer b4" />
   </div>

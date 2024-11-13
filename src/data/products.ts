@@ -1,4 +1,4 @@
-import type { ProductInterface } from '@/interfaces'
+// import type { ProductInterface } from '@/interfaces'
 
 export default [
   {
@@ -72,4 +72,5 @@ export default [
     price: 899,
     category: 'all',
   },
-] as ProductInterface[]
+]
+//as ProductInterface[]
