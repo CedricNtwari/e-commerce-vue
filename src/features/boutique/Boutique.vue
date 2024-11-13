@@ -21,10 +21,10 @@ const state = reactive<{
   filters: { ...DEFAULT_FILTERS },
 })
 
-const addProductToCart = (productId: number): void => {
-  const product = state.products.find(product => product.id === productId)
+const addProductToCart = (productId: string): void => {
+  const product = state.products.find(product => product._id === productId)
   if (product) {
-    const productInCart = state.cart.find(product => product.id === productId)
+    const productInCart = state.cart.find(product => product._id === productId)
     if (productInCart) {
       productInCart.quantity++
     } else {
@@ -33,11 +33,11 @@ const addProductToCart = (productId: number): void => {
   }
 }
 
-const removeProductFromCart = (productId: number): void => {
-  const productFromCart = state.cart.find(product => product.id === productId)
+const removeProductFromCart = (productId: string): void => {
+  const productFromCart = state.cart.find(product => product._id === productId)
   if (productFromCart) {
     if (productFromCart?.quantity === 1) {
-      state.cart = state.cart.filter(product => product.id !== productId)
+      state.cart = state.cart.filter(product => product._id !== productId)
     } else {
       productFromCart.quantity--
     }
