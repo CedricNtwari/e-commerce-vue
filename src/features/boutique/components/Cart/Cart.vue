@@ -61,11 +61,6 @@ const emit = defineEmits<{
   bottom: 20px;
   right: 20px;
   z-index: 2;
-
-  @include mixins.xs {
-    width: -webkit-fill-available;
-    margin-left: 20px;
-  }
 }
 
 .tag {
