@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Shop from './components/Shop/Shop.vue'
 import Cart from './components/Cart/Cart.vue'
-import { reactive, computed, watchEffect } from 'vue'
+import { reactive, computed, watchEffect, provide, toRef, watch } from 'vue'
 import type {
   ProductInterface,
   ProductCartInterface,
@@ -10,24 +10,43 @@ import type {
 } from '@/interfaces'
 import { DEFAULT_FILTERS } from '../../data/filters'
 import { fetchProducts } from '../../shared/services/product.service'
+import { pageKey } from '@/shared/injectionKeys/pageKey'
 
 const state = reactive<{
   products: ProductInterface[]
   cart: ProductCartInterface[]
   filters: FiltersInterface
+  page: number
+  isLoading: boolean
+  moreResults: boolean
 }>({
   products: [],
   cart: [],
   filters: { ...DEFAULT_FILTERS },
+  page: 1,
+  isLoading: true,
+  moreResults: true,
 })
 
+watch(state.filters, () => {
+  state.page = 1
+  state.products = []
+})
+
+provide(pageKey, toRef(state, 'page'))
+
 watchEffect(async () => {
-  const products = await fetchProducts(state.filters)
+  state.isLoading = true
+  const products = await fetchProducts(state.filters, state.page)
   if (Array.isArray(products)) {
     state.products = [...state.products, ...products]
+    if (products.length < 20) {
+      state.moreResults = false
+    }
   } else {
-    state.products = [products]
+    state.products = [...state.products, products]
   }
+  state.isLoading = false
 })
 
 const addProductToCart = (productId: string): void => {
@@ -60,11 +79,7 @@ const filteredProducts = computed(() => {
     if (
       product.title
         .toLocaleLowerCase()
-        .startsWith(state.filters.search.toLocaleLowerCase()) &&
-      product.price >= state.filters.priceRange[0] &&
-      product.price <= state.filters.priceRange[1] &&
-      (product.category === state.filters.category ||
-        state.filters.category === 'all')
+        .startsWith(state.filters.search.toLocaleLowerCase())
     ) {
       return true
     } else {
@@ -91,6 +106,8 @@ const updateFilter = (filterUpdate: FilterUpdate) => {
     <Shop
       @update-filter="updateFilter"
       @add-product-to-cart="addProductToCart"
+      @load-more="state.page++"
+      :more-results="state.moreResults"
       :products="filteredProducts"
       :filters="state.filters"
       class="shop"

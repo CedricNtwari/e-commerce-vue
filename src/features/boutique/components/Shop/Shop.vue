@@ -10,11 +10,13 @@ import type {
 defineProps<{
   products: ProductInterface[]
   filters: FiltersInterface
+  moreResults: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: string): void
   (e: 'updateFilter', updateFilter: FilterUpdate): void
+  (e: 'loadMore'): void
 }>()
 </script>
 
@@ -29,7 +31,9 @@ const emit = defineEmits<{
     <ShopProductList
       class="flex-fill scrollable"
       :products="products"
+      :more-results="moreResults"
       @add-product-to-cart="emit('addProductToCart', $event)"
+      @load-more="emit('loadMore')"
     />
   </div>
 </template>

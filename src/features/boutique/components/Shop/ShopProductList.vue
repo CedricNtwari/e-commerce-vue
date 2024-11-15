@@ -1,22 +1,48 @@
 <script setup lang="ts">
+import { inject, ref, watch } from 'vue'
 import ShopProduct from './ShopProduct.vue'
 import type { ProductInterface } from '@/interfaces'
+import { pageKey } from '@/shared/injectionKeys/pageKey'
 
-defineProps<{ products: ProductInterface[] }>()
+defineProps<{
+  products: ProductInterface[]
+  moreResults: boolean
+}>()
+
+const page = inject(pageKey)!
+
+const scrollableDiv = ref<HTMLDivElement | null>(null)
 
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: string): void
+  (e: 'loadMore'): void
 }>()
+
+watch(page, () => {
+  if (page.value === 1) {
+    scrollableDiv.value?.scroll(0, 0)
+  }
+})
 </script>
 
 <template>
-  <div class="grid p-20">
-    <ShopProduct
-      @add-product-to-cart="emit('addProductToCart', $event)"
-      v-for="product in products"
-      :product="product"
-      :key="product._id"
-    />
+  <div ref="scrollableDiv" class="d-flex flex-column p-20">
+    <div class="grid mb-20">
+      <ShopProduct
+        @add-product-to-cart="emit('addProductToCart', $event)"
+        v-for="product in products"
+        :product="product"
+        :key="product._id"
+      />
+    </div>
+    <div
+      v-if="moreResults"
+      class="d-flex flex-row align-items-center justify-content-center"
+    >
+      <button @click="emit('loadMore')" class="btn btn-primary">
+        Load more
+      </button>
+    </div>
   </div>
 </template>
 
