@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import CartProductList from './CartProductList.vue'
 import type { ProductCartInterface } from '@/interfaces'
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
+import CartProductList from './CartProductList.vue'
+
+const state = reactive<{
+  open: boolean
+}>({
+  open: false,
+})
 
 const props = defineProps<{
   cart: ProductCartInterface[]
@@ -19,15 +25,98 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="p-20 d-flex flex-column">
-    <h2 class="mb-10">Cart</h2>
-    <CartProductList
-      class="flex-fill"
-      :cart="props.cart"
-      @remove-product-from-cart="emit('removeProductFromCart', $event)"
-    />
-    <button class="btn btn-sucess">Order {{ totalPrice }}€</button>
+  <div class="cart-container">
+    <Transition mode="out-in">
+      <div
+        v-if="!state.open"
+        @click="state.open = !state.open"
+        class="cart-holder d-flex flex-row justify-content-center align-items-center"
+      >
+        <span class="tag">{{ cart.length }}</span>
+        <i class="fa-solid fa-basket-shopping"></i>
+      </div>
+      <div v-else>
+        <Teleport to="body">
+          <div @click="state.open = false" class="calc"></div>
+        </Teleport>
+        <div class="p-20 d-flex flex-column card">
+          <h2 class="mb-10">Cart</h2>
+          <CartProductList
+            class="flex-fill"
+            :cart="cart"
+            @remove-product-from-cart="emit('removeProductFromCart', $event)"
+          />
+          <button class="btn btn-success">Order ({{ totalPrice }}€)</button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use '../../../../assets/scss/mixins';
+
+.cart-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2;
+
+  @include mixins.xs {
+    width: -webkit-fill-available;
+    margin-left: 20px;
+  }
+}
+
+.tag {
+  width: 15px;
+  font-size: 10px;
+  line-height: 15px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background-color: var(--danger-1);
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: var(--text-primary-color);
+}
+
+.calc {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 100%;
+  background-color: #0000005e;
+  z-index: 1;
+}
+
+.cart-holder {
+  position: relative;
+  background-color: var(--primary-1);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: var(--primary-2);
+  }
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  i {
+    font-size: 20px;
+    color: var(--text-primary-color);
+  }
+}
+
+.v-leave-to,
+.v-enter-from {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.2s;
+}
+</style>

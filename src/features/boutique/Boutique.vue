@@ -102,7 +102,7 @@ const updateFilter = (filterUpdate: FilterUpdate) => {
 </script>
 
 <template>
-  <div class="boutique-container" :class="{ 'grid-empty': cartEmpty }">
+  <div class="d-flex flex-column">
     <Shop
       @update-filter="updateFilter"
       @add-product-to-cart="addProductToCart"
@@ -110,45 +110,13 @@ const updateFilter = (filterUpdate: FilterUpdate) => {
       :more-results="state.moreResults"
       :products="filteredProducts"
       :filters="state.filters"
-      class="shop"
     />
     <Cart
       v-if="!cartEmpty"
       @remove-product-from-cart="removeProductFromCart"
       :cart="state.cart"
-      class="cart"
     />
   </div>
 </template>
 
-<style scoped lang="scss">
-.boutique-container {
-  display: grid;
-  grid-template-columns: 75% 25%;
-}
-
-.grid-empty {
-  grid-template-columns: 100%;
-}
-
-.cart {
-  background-color: white;
-  border-left: var(--border);
-}
-
-@media (max-width: 768px) {
-  .boutique-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      'shop'
-      'cart';
-  }
-
-  .cart {
-    grid-area: cart;
-    border-left: none;
-    border-top: var(--border);
-  }
-}
-</style>
+<style scoped lang="scss"></style>

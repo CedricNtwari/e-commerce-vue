@@ -5,8 +5,8 @@
   --primary-2: #2980b9;
   --danger-1: #e74c3c;
   --danger-2: #c0392b;
-  --sucess-1: #2ecc71;
-  --sucess-2: #27ae60;
+  --success-1: #2ecc71;
+  --success-2: #27ae60;
   --gray-1: #f6f6f6;
   --gray-2: #ddd;
   --gray-3: #34495e;
@@ -150,6 +150,10 @@ label {
   margin-right: 20px;
 }
 
+.ml-20 {
+  margin-left: 20px;
+}
+
 .mb-20 {
   margin-bottom: 20px;
 }
@@ -181,11 +185,11 @@ label {
   }
 }
 
-.btn-sucess {
-  background-color: var(--sucess-1);
+.btn-success {
+  background-color: var(--success-1);
   color: var(--text-primary-color);
   &:hover {
-    background-color: var(--sucess-2);
+    background-color: var(--success-2);
   }
 }
 
