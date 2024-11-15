@@ -17,7 +17,7 @@ export async function fetchProducts(
     `{"$gte":${filter.priceRange[0]}, "$lte":${filter.priceRange[1]}}`,
   )
   const products = await (
-    await fetch(`https://restapi.fr/api/vueprojectproducts?${query}`)
+    await fetch(`https://restapi.fr/api/projetproducts?${query}`)
   ).json()
   return products
 }
