@@ -1,3 +1,5 @@
+@use './mixins';
+
 :root {
   --primary-1: #3498db;
   --primary-2: #2980b9;
@@ -192,4 +194,10 @@ label {
   border-radius: var(--border-radius);
   background-color: white;
   padding: 30px;
+}
+
+.hide-xs {
+  @include mixins.xs {
+    display: none;
+  }
 }

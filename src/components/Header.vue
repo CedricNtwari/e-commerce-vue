@@ -1,54 +1,12 @@
-<template>
-  <header class="header-container">
-    <a href="#" class="logo-container">
-      <img src="../assets/logo.svg" alt="Logo" />
-      <span class="logo">Electronica AG</span>
-    </a>
-    <button
-      v-if="isMobile"
-      @click="isMenuOpen = !isMenuOpen"
-      class="burger-menu"
-    >
-      ☰
-    </button>
-
-    <!-- Navigation Links -->
-    <nav
-      :class="{
-        'menu-mobile': isMobile,
-        'menu-desktop': !isMobile,
-        show: isMobile && isMenuOpen,
-      }"
-    >
-      <ul class="d-flex flex-row left-links">
-        <li>
-          <a
-            :class="{ active: page === 'Boutique' }"
-            @click="emit('navigate', 'Boutique')"
-            class="px-10"
-            >Boutique</a
-          >
-        </li>
-        <li>
-          <a
-            :class="{ active: page === 'Admin' }"
-            @click="emit('navigate', 'Admin')"
-            class="px-10"
-            >Admin</a
-          >
-        </li>
-      </ul>
-      <ul class="d-flex flex-row right-links">
-        <li><a class="px-10" href="#">Register</a></li>
-        <li><a class="px-10" href="#">Log In</a></li>
-      </ul>
-    </nav>
-  </header>
-</template>
-
 <script setup lang="ts">
-import type { Page } from '@/interfaces'
-import { ref, onMounted, onUnmounted } from 'vue'
+import type { Page } from '../interfaces'
+import { reactive } from 'vue'
+
+const state = reactive<{
+  open: boolean
+}>({
+  open: false,
+})
 
 defineProps<{
   page: Page
@@ -57,117 +15,137 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'navigate', page: Page): void
 }>()
-
-const isMenuOpen = ref<boolean>(false)
-
-const isMobile = ref<boolean>(window.innerWidth < 768)
-
-const updateIsMobile = (): void => {
-  isMobile.value = window.innerWidth < 768
-  if (!isMobile.value) {
-    isMenuOpen.value = false
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('resize', updateIsMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateIsMobile)
-})
 </script>
 
+<template>
+  <header class="px-20 d-flex flex-row align-items-center">
+    <a href="#" class="d-flex flex-row align-items-center mr-20">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg"
+      />
+      <span class="logo">Electronica AG</span>
+    </a>
+    <div class="d-flex flex-row align-items-center flex-fill actions-container">
+      <ul class="d-flex flex-row flex-fill hide-xs flex-fill">
+        <li class="mr-10">
+          <a
+            :class="{ active: page === 'Boutique' }"
+            @click="emit('navigate', 'Boutique')"
+            >Boutique</a
+          >
+        </li>
+        <li>
+          <a
+            :class="{ active: page === 'Admin' }"
+            @click="emit('navigate', 'Admin')"
+            >Admin</a
+          >
+        </li>
+      </ul>
+      <ul class="d-flex flex-row hide-xs">
+        <li class="mr-10">
+          <a href="#">Register</a>
+        </li>
+        <li>
+          <a href="#">Log In</a>
+        </li>
+      </ul>
+      <div class="menu-xs-container">
+        <i
+          @click="state.open = !state.open"
+          class="fa-solid fa-bars show-xs"
+        ></i>
+        <Transition>
+          <ul @click="state.open = false" v-if="state.open" class="menu card">
+            <li>
+              <a
+                :class="{ active: page === 'Boutique' }"
+                @click="emit('navigate', 'Boutique')"
+                >Boutique</a
+              >
+            </li>
+            <li>
+              <a
+                :class="{ active: page === 'Admin' }"
+                @click="emit('navigate', 'Admin')"
+                >Admin</a
+              >
+            </li>
+            <li>
+              <a href="#">Register</a>
+            </li>
+            <li>
+              <a href="#">Log In</a>
+            </li>
+          </ul>
+        </Transition>
+      </div>
+    </div>
+  </header>
+</template>
+
 <style lang="scss" scoped>
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+@use '../assets/scss/mixins';
+
+header {
   background-color: var(--primary-1);
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  color: var(--text-primary-color);
-
-  img {
-    width: 20px;
-    margin-right: 5px;
+  a {
+    color: var(--text-primary-color);
+    img {
+      width: 20px;
+      margin-right: 5px;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+    }
   }
 
-  .logo {
-    font-weight: 700;
+  i {
+    @include mixins.sm {
+      display: none;
+    }
+    justify-self: end;
+    color: white;
     font-size: 20px;
+    cursor: pointer;
+  }
+
+  a.active {
+    text-decoration: underline;
+  }
+
+  .actions-container {
+    @include mixins.xs {
+      justify-content: end;
+    }
+  }
+
+  .menu-xs-container {
+    position: relative;
+  }
+
+  .menu {
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    li {
+      padding: 10px;
+    }
+    a {
+      color: var(--text-color);
+    }
   }
 }
 
-.burger-menu {
-  background: none;
-  border: none;
-  color: var(--text-primary-color);
-  font-size: 24px;
-  cursor: pointer;
-  display: none;
+.v-leave-to,
+.v-enter-from {
+  transform: translateY(-10px);
+  opacity: 0;
 }
 
-.menu-mobile {
-  display: none;
-}
-
-.menu-mobile.show {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 31px;
-  left: 0;
-  right: 0;
-  background-color: var(--primary-1);
-  padding: 10px 0;
-  z-index: 1;
-}
-
-.menu-desktop {
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-}
-
-.left-links {
-  display: flex;
-  flex-grow: 1;
-}
-
-.right-links {
-  display: flex;
-  justify-content: flex-end;
-}
-
-li a {
-  color: var(--text-primary-color);
-}
-
-.active {
-  text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-  .burger-menu {
-    display: inline;
-  }
-
-  .menu-desktop {
-    display: none;
-  }
-
-  .menu-mobile {
-    display: none;
-  }
-
-  .menu-mobile.show {
-    display: flex;
-  }
+.v-leave-active,
+.v-enter-active {
+  transition: all 0.2s;
 }
 </style>
