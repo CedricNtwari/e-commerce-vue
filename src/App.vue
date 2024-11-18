@@ -34,7 +34,7 @@ const navigate = (page: Page): void => {
         <Component :is="pages[state.page]" />
       </Suspense>
     </div>
-    <TheFooter class="footer b4" />
+    <TheFooter class="footer b4 hide-xs" />
   </div>
 </template>
 
