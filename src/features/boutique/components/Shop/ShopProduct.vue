@@ -14,7 +14,11 @@ const emit = defineEmits<{
   <div class="product d-flex flex-column">
     <div
       class="product-image"
-      :style="{ backgroundImage: `url(${product.image})` }"
+      :style="{
+        backgroundImage: product.image
+          ? `url(${product.image})`
+          : 'url(https://media.ldlc.com/r1600/ld/products/00/05/82/01/LD0005820198_1.jpg)',
+      }"
     ></div>
     <div class="p-10 d-flex flex-column">
       <h4>{{ product.title }}</h4>
