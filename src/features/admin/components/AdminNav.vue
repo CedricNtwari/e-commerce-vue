@@ -6,6 +6,9 @@
     <router-link class="mb-10" to="/admin/addproduct"
       >Add a product</router-link
     >
+    <router-link class="mb-10" to="/admin/productlist"
+      >Product list</router-link
+    >
   </nav>
 </template>
 

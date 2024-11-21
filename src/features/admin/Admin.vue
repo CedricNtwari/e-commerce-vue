@@ -14,11 +14,23 @@ import AdminNav from './components/AdminNav.vue'
 </template>
 
 <style scoped lang="scss">
+@use '../../assets/scss/mixins' as *;
 .admin-container {
   height: 100%;
+
+  @include xs {
+    flex-direction: column;
+  }
 }
 
 .admin-nav {
   margin-right: 20px;
+  flex: 0 0 200px;
+
+  @include xs {
+    margin-right: 0;
+    margin-bottom: 10px;
+    flex: none;
+  }
 }
 </style>

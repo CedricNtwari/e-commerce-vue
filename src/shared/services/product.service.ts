@@ -1,4 +1,8 @@
 import type { FiltersInterface, ProductInterface } from '../../interfaces'
+import { ref } from 'vue'
+import type { Ref } from 'vue'
+
+const BASE_URL = 'https://restapi.fr/api/projetproducts'
 
 export async function fetchProducts(
   filter: FiltersInterface,
@@ -16,8 +20,32 @@ export async function fetchProducts(
     'price',
     `{"$gte":${filter.priceRange[0]}, "$lte":${filter.priceRange[1]}}`,
   )
-  const products = await (
-    await fetch(`https://restapi.fr/api/projetproducts?${query}`)
-  ).json()
+  const products = await (await fetch(`${BASE_URL}?${query}`)).json()
   return products
+}
+
+export function useFetchProducts(): {
+  products: Ref<ProductInterface[] | null>
+  loading: Ref<boolean>
+  error: Ref<any>
+} {
+  const products = ref<ProductInterface[] | null>(null)
+  const loading = ref<boolean>(true)
+  const error = ref<any>(null)
+
+  ;(async () => {
+    try {
+      products.value = await (await fetch(BASE_URL)).json()
+    } catch (e) {
+      error.value = e
+    } finally {
+      loading.value = false
+    }
+  })()
+
+  return {
+    products,
+    loading,
+    error,
+  }
 }
