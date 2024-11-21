@@ -31,7 +31,7 @@ const state = reactive<{
           <a href="#">Register</a>
         </li>
         <li>
-          <a href="#">>Log In</a>
+          <a href="#">Log In</a>
         </li>
       </ul>
       <div class="menu-xs-container">

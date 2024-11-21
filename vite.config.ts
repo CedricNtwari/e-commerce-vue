@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     vueJsx(),
     vueDevTools(),
     viteStaticCopy({
-      targets: [{ src: '404.html', dest: './' }],
+      targets: [{ src: 'public/404.html', dest: '.' }],
     }),
   ],
   resolve: {
