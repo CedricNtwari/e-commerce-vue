@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import ProductForm from './components/ProductForm.vue'
+import AdminNav from './components/AdminNav.vue'
 </script>
 
 <template>
-  <div
-    class="admin-container d-flex flex-row justify-content-center align-items-center"
-  >
-    <ProductForm />
+  <div class="admin-container d-flex flex-row p-20">
+    <AdminNav class="admin-nav" />
+    <div
+      class="admin-main flex-fill d-flex flex-row justify-content-center align-items-center"
+    >
+      <router-view> </router-view>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .admin-container {
   height: 100%;
+}
+
+.admin-nav {
+  margin-right: 20px;
 }
 </style>

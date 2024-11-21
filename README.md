@@ -4,7 +4,7 @@ An e-commerce platform built using **Vue 3** and **TypeScript**, powered by **Vi
 
 ## Overview
 
-This project is a desktop(just for now)-oriented e-commerce website that displays a selection of products with options to add items to a cart. While it currently supports a desktop layout, responsive design for tablet and mobile views is planned for future updates.
+This project is a responsive-oriented e-commerce website that displays a selection of products with options to add items to a cart. While it currently supports a desktop layout, responsive design for tablet and mobile views is planned for future updates.
 
 ## Features
 
