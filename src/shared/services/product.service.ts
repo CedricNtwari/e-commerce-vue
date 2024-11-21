@@ -49,3 +49,10 @@ export function useFetchProducts(): {
     error,
   }
 }
+
+  export async function deleteProduct(productId: string): Promise<string> {
+    await fetch(`${BASE_URL}/${productId}`, {
+      method: 'DELETE',
+    })
+    return productId
+  }
