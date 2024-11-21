@@ -27,11 +27,11 @@ export async function fetchProducts(
 export function useFetchProducts(): {
   products: Ref<ProductInterface[] | null>
   loading: Ref<boolean>
-  error: Ref<any>
+  error: Ref<unknown>
 } {
   const products = ref<ProductInterface[] | null>(null)
   const loading = ref<boolean>(true)
-  const error = ref<any>(null)
+  const error = ref<unknown>(null)
 
   ;(async () => {
     try {
