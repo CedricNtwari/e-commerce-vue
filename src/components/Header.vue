@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Page } from '../interfaces'
 import { reactive } from 'vue'
 import Calc from './Calc.vue'
 
@@ -8,14 +7,6 @@ const state = reactive<{
 }>({
   open: false,
 })
-
-defineProps<{
-  page: Page
-}>()
-
-const emit = defineEmits<{
-  (e: 'navigate', page: Page): void
-}>()
 </script>
 
 <template>
@@ -24,23 +15,15 @@ const emit = defineEmits<{
       <img
         src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg"
       />
-      <span class="logo">Electronica AG</span>
+      <span class="logo"><router-link to="/">Electronica AG</router-link></span>
     </a>
     <div class="d-flex flex-row align-items-center flex-fill actions-container">
       <ul class="d-flex flex-row flex-fill hide-xs flex-fill">
         <li class="mr-10">
-          <a
-            :class="{ active: page === 'Boutique' }"
-            @click="emit('navigate', 'Boutique')"
-            >Boutique</a
-          >
+          <router-link to="/boutique">Boutique</router-link>
         </li>
         <li>
-          <a
-            :class="{ active: page === 'Admin' }"
-            @click="emit('navigate', 'Admin')"
-            >Admin</a
-          >
+          <router-link to="/admin">Admin</router-link>
         </li>
       </ul>
       <ul class="d-flex flex-row hide-xs">
@@ -48,7 +31,7 @@ const emit = defineEmits<{
           <a href="#">Register</a>
         </li>
         <li>
-          <a href="#">Log In</a>
+          <a href="#">>Log In</a>
         </li>
       </ul>
       <div class="menu-xs-container">
@@ -64,24 +47,16 @@ const emit = defineEmits<{
         <Transition>
           <ul @click="state.open = false" v-if="state.open" class="menu card">
             <li>
-              <a
-                :class="{ active: page === 'Boutique' }"
-                @click="emit('navigate', 'Boutique')"
-                >Boutique</a
-              >
+              <router-link to="/boutique">Boutique</router-link>
             </li>
             <li>
-              <a
-                :class="{ active: page === 'Admin' }"
-                @click="emit('navigate', 'Admin')"
-                >Admin</a
-              >
+              <router-link to="/admin">Admin</router-link>
             </li>
             <li>
-              <a href="#">Register</a>
+              <a href="#">Inscription</a>
             </li>
             <li>
-              <a href="#">Log In</a>
+              <a href="#">Connexion</a>
             </li>
           </ul>
         </Transition>
@@ -117,7 +92,7 @@ header {
     cursor: pointer;
   }
 
-  a.active {
+  a.router-link-active {
     text-decoration: underline;
   }
 
