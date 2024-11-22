@@ -24,7 +24,9 @@ const tryDeleteProduct = async (productId: string) => {
         :key="product._id"
       >
         <span class="flex-fill">{{ product.title }}</span>
-        <button class="btn btn-primary mr-20">Edit</button>
+        <router-link :to="{ name: 'edit', params: { productId: product._id } }">
+          <button class="btn btn-primary mr-20">Edit</button>
+        </router-link>
         <button @click="tryDeleteProduct(product._id)" class="btn btn-danger">
           Cancel
         </button>

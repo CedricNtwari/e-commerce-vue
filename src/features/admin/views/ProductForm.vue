@@ -3,8 +3,35 @@ import { useForm, useField } from 'vee-validate'
 import { z } from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { onMounted, ref } from 'vue'
+import {
+  addProduct,
+  editProduct,
+  getProduct,
+} from '../../../shared/services/product.service'
+import type {
+  ProductFormInterface,
+  ProductInterface,
+} from '../../../interfaces/Product.interface'
+import { useRoute, useRouter } from 'vue-router'
 
 const firstInput = ref<HTMLInputElement | null>(null)
+const product = ref<ProductInterface | null>(null)
+
+const route = useRoute()
+const router = useRouter()
+
+if (route.params.productId) {
+  product.value = await getProduct(route.params.productId as string)
+}
+
+const initialValues = {
+  title: product.value ? product.value.title : '',
+  image: product.value ? product.value.image : '',
+  price: product.value ? product.value.price : 0,
+  description: product.value ? product.value.description : '',
+  category: product.value ? product.value.category : 'gamer',
+}
+
 onMounted(() => {
   firstInput.value?.focus()
 })
@@ -30,6 +57,7 @@ const validationSchema = toTypedSchema(
 
 const { handleSubmit, isSubmitting } = useForm({
   validationSchema,
+  initialValues,
 })
 
 const title = useField('title')
@@ -38,17 +66,14 @@ const price = useField('price')
 const description = useField('description')
 const category = useField('category')
 
-const trySubmit = handleSubmit(async (formValues, { resetForm }) => {
+const trySubmit = handleSubmit(async formValues => {
   try {
-    await fetch('https://restapi.fr/api/projetproducts', {
-      method: 'POST',
-      body: JSON.stringify(formValues),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    resetForm()
-    firstInput.value?.focus()
+    if (!product.value) {
+      await addProduct(formValues as ProductFormInterface)
+    } else {
+      await editProduct(product.value._id, formValues as ProductFormInterface)
+    }
+    router.push('/admin/productlist')
   } catch (e) {
     console.log(e)
   }
@@ -57,10 +82,12 @@ const trySubmit = handleSubmit(async (formValues, { resetForm }) => {
 
 <template>
   <div class="card">
-    <h3 class="mb-10">Add a product</h3>
+    <h3 class="mb-10">
+      {{ product ? 'Modify product' : 'Create product' }}
+    </h3>
     <form @submit="trySubmit">
       <div class="d-flex flex-column mb-20">
-        <label class="mb-5">*Title</label>
+        <label class="mb-5">*Titre</label>
         <input ref="firstInput" v-model="title.value.value" type="text" />
         <small class="form-error" v-if="title.errorMessage.value">{{
           title.errorMessage.value
@@ -92,7 +119,7 @@ const trySubmit = handleSubmit(async (formValues, { resetForm }) => {
         <select v-model="category.value.value">
           <option value disabled>Choisissez une catégorie</option>
           <option value="gamer">Game</option>
-          <option value="desktop">Dektop</option>
+          <option value="desktop">Desktop</option>
           <option value="streaming">Stream</option>
         </select>
         <small class="form-error" v-if="category.errorMessage.value">{{

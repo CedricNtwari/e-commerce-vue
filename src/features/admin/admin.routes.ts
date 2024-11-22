@@ -15,6 +15,7 @@ export const ADMIN_ROUTES: RouteRecordRaw[] = [
   },
   {
     path: 'edit/:productId',
+    name: 'edit',
     component: () => import('./views/ProductForm.vue'),
   },
 ]

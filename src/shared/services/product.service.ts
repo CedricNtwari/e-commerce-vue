@@ -1,4 +1,8 @@
-import type { FiltersInterface, ProductInterface } from '../../interfaces'
+import type {
+  FiltersInterface,
+  ProductFormInterface,
+  ProductInterface,
+} from '../../interfaces'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 
@@ -50,9 +54,45 @@ export function useFetchProducts(): {
   }
 }
 
-  export async function deleteProduct(productId: string): Promise<string> {
-    await fetch(`${BASE_URL}/${productId}`, {
-      method: 'DELETE',
+export async function deleteProduct(productId: string): Promise<string> {
+  await fetch(`${BASE_URL}/${productId}`, {
+    method: 'DELETE',
+  })
+  return productId
+}
+
+export async function addProduct(
+  product: ProductFormInterface,
+): Promise<ProductInterface> {
+  const newProduct = await (
+    await fetch(BASE_URL, {
+      method: 'POST',
+      body: JSON.stringify(product),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
-    return productId
-  }
+  ).json()
+  return newProduct
+}
+
+export async function getProduct(productId: string): Promise<ProductInterface> {
+  const product = await (await fetch(`${BASE_URL}/${productId}`)).json()
+  return product
+}
+
+export async function editProduct(
+  productId: string,
+  product: ProductFormInterface,
+): Promise<ProductInterface> {
+  const updatedProduct = await (
+    await fetch(`${BASE_URL}/${productId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(product),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  ).json()
+  return updatedProduct
+}
