@@ -26,7 +26,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: string): void
   (e: 'updateFilter', updateFilter: FilterUpdate): void
-  (e: 'incPage'): void
+  (e: 'loadMore'): void
 }>()
 </script>
 
@@ -58,7 +58,7 @@ const emit = defineEmits<{
       <ShopProductList
         class="flex-fill scrollable"
         @add-product-to-cart="emit('addProductToCart', $event)"
-        @inc-page="emit('incPage')"
+        @load-more="emit('loadMore')"
         :products="products"
         :more-results="moreResults"
       />
