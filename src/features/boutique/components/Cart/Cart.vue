@@ -45,7 +45,7 @@ const emit = defineEmits<{
             :cart="cart"
             @remove-product-from-cart="emit('removeProductFromCart', $event)"
           />
-          <button class="btn btn-success">Commander ({{ totalPrice }}€)</button>
+          <button class="btn btn-success">Order ({{ totalPrice }}€)</button>
         </div>
       </div>
     </Transition>
