@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { Category, FiltersInterface, FilterUpdate } from '@/interfaces'
+import type {
+  Category,
+  FiltersInterface,
+  FilterUpdate,
+} from '@/shared/interfaces'
 
 defineProps<{
   filters: FiltersInterface

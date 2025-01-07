@@ -2,7 +2,7 @@ import type {
   FiltersInterface,
   ProductFormInterface,
   ProductInterface,
-} from '../../interfaces'
+} from '../interfaces'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 

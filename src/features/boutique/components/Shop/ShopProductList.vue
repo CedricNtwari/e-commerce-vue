@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, watch } from 'vue'
 import ShopProduct from './ShopProduct.vue'
-import type { ProductInterface } from '@/interfaces'
+import type { ProductInterface } from '@/shared/interfaces'
 import { pageKey } from '@/shared/injectionKeys/pageKey'
 
 defineProps<{

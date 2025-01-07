@@ -11,7 +11,7 @@ import {
 import type {
   ProductFormInterface,
   ProductInterface,
-} from '../../../interfaces/Product.interface'
+} from '../../../shared/interfaces/Product.interface'
 import { useRoute, useRouter } from 'vue-router'
 
 const firstInput = ref<HTMLInputElement | null>(null)
