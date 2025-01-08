@@ -39,7 +39,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: List interfaces directory
-        run: ls -R src/interfaces
+        run: ls -R src/shared/interfaces
 
       - name: Install dependencies
         run: npm ci
