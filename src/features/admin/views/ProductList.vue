@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import {
-  useFetchProducts,
-  deleteProduct,
-} from '../../../shared/services/product.service'
+import { useAdminProductStore } from '../stores/AdminProductStore'
 
-const { products, loading, error } = useFetchProducts()
+const adminProductStore = useAdminProductStore()
+adminProductStore.fetchProducts()
 
-const tryDeleteProduct = async (productId: string) => {
-  await deleteProduct(productId)
-  products.value = products.value!.filter(p => p._id !== productId)
+function tryDeleteProduct(productId: string) {
+  adminProductStore.tryDeleteProduct(productId)
 }
 </script>
 
 <template>
   <div class="container card">
     <h1>Product List</h1>
-    <h3 v-if="error">Oops an error</h3>
-    <h3 v-else-if="loading">Loading...</h3>
+
+    <h3 v-if="adminProductStore.isLoading">Loading...</h3>
     <ul v-else>
       <li
         class="d-flex flex-row align-items-center"
-        v-for="product of products"
+        v-for="product of adminProductStore.products"
         :key="product._id"
       >
         <span class="flex-fill">{{ product.title }}</span>

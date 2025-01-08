@@ -3,22 +3,22 @@ import { useForm, useField } from 'vee-validate'
 import { z } from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { onMounted, ref } from 'vue'
-import {
-  addProduct,
-  editProduct,
-  getProduct,
-} from '../../../shared/services/product.service'
+import { getProduct } from '../../../shared/services/product.service'
 import type {
   ProductFormInterface,
   ProductInterface,
 } from '../../../shared/interfaces/Product.interface'
 import { useRoute, useRouter } from 'vue-router'
+import { useAdminProductStore } from '../stores/AdminProductStore'
+import type { Category } from '@/shared/interfaces'
 
 const firstInput = ref<HTMLInputElement | null>(null)
 const product = ref<ProductInterface | null>(null)
 
 const route = useRoute()
 const router = useRouter()
+
+const adminProductStore = useAdminProductStore()
 
 if (route.params.productId) {
   product.value = await getProduct(route.params.productId as string)
@@ -67,11 +67,18 @@ const description = useField('description')
 const category = useField('category')
 
 const trySubmit = handleSubmit(async formValues => {
+  const validatedFormValues: ProductFormInterface = {
+    ...formValues,
+    category: formValues.category as Category,
+  }
   try {
     if (!product.value) {
-      await addProduct(formValues as ProductFormInterface)
+      await adminProductStore.addProduct(validatedFormValues)
     } else {
-      await editProduct(product.value._id, formValues as ProductFormInterface)
+      await adminProductStore.editProduct(
+        product.value._id,
+        validatedFormValues,
+      )
     }
     router.push('/admin/productlist')
   } catch (e) {
