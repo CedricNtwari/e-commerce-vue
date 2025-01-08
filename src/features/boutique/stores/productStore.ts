@@ -1,5 +1,11 @@
 import { DEFAULT_FILTERS } from '@/data/filters'
-import type { FiltersInterface, ProductInterface } from '@/shared/interfaces'
+import { seed, seed40Products } from '@/data/seed'
+import type {
+  FiltersInterface,
+  FilterUpdate,
+  ProductInterface,
+} from '@/shared/interfaces'
+import { fetchProducts } from '@/shared/services/product.service'
 import { defineStore } from 'pinia'
 
 interface ProductState {
@@ -18,44 +24,46 @@ export const useProducts = defineStore('products', {
     isLoading: false,
     moreResults: false,
   }),
+  getters: {
+    filteredProducts(state) {
+      return state.products.filter(product =>
+        product.title
+          .toLocaleLowerCase()
+          .startsWith(state.filters.search.toLocaleLowerCase()),
+      )
+    },
+  },
+  actions: {
+    async fetchProducts() {
+      this.isLoading = true
+      const products = await fetchProducts(this.filters, this.page)
+      if (Array.isArray(products)) {
+        this.products = [...this.products, ...products]
+        if (products.length < 20) {
+          this.moreResults = false
+        }
+      } else {
+        this.products = [...this.products, products]
+      }
+      this.isLoading = false
+    },
+    updateFilter(filterUpdate: FilterUpdate) {
+      if (filterUpdate.search !== undefined) {
+        this.filters.search = filterUpdate.search
+      } else if (filterUpdate.priceRange) {
+        this.filters.priceRange = filterUpdate.priceRange
+      } else if (filterUpdate.category) {
+        this.filters.category = filterUpdate.category
+      } else {
+        this.filters = { ...DEFAULT_FILTERS }
+      }
+    },
+    incPage() {
+      this.page++
+    },
+    seed() {
+      seed('projetproducts')
+      seed40Products('projetproducts') // seed 40 products
+    },
+  },
 })
-
-// watchEffect(async () => {
-//   state.isLoading = true
-//   const products = await fetchProducts(state.filters, state.page)
-//   if (Array.isArray(products)) {
-//     state.products = [...state.products, ...products]
-//     if (products.length < 20) {
-//       state.moreResults = false
-//     }
-//   } else {
-//     state.products = [...state.products, products]
-//   }
-//   state.isLoading = false
-// })
-
-// const filteredProducts = computed(() => {
-//   return state.products.filter(product => {
-//     if (
-//       product.title
-//         .toLocaleLowerCase()
-//         .startsWith(state.filters.search.toLocaleLowerCase())
-//     ) {
-//       return true
-//     } else {
-//       return false
-//     }
-//   })
-// })
-
-// const updateFilter = (filterUpdate: FilterUpdate) => {
-//   if (filterUpdate.search !== undefined) {
-//     state.filters.search = filterUpdate.search
-//   } else if (filterUpdate.priceRange) {
-//     state.filters.priceRange = filterUpdate.priceRange
-//   } else if (filterUpdate.category) {
-//     state.filters.category = filterUpdate.category
-//   } else {
-//     state.filters = { ...DEFAULT_FILTERS }
-//   }
-// }

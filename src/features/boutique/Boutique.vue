@@ -1,26 +1,45 @@
 <script setup lang="ts">
 import Shop from './components/Shop/Shop.vue'
 import Cart from './components/Cart/Cart.vue'
-import { reactive, computed, watchEffect, provide, toRef, watch } from 'vue'
-import type {
-  ProductInterface,
-  ProductCartInterface,
-  FiltersInterface,
-  FilterUpdate,
-} from '@/shared/interfaces'
-import { DEFAULT_FILTERS } from '../../data/filters'
-import { fetchProducts } from '../../shared/services/product.service'
-import { pageKey } from '@/shared/injectionKeys/pageKey'
+import type { FilterUpdate } from '@/shared/interfaces'
 import { useProducts } from './stores/productStore'
 import { useCart } from './stores/cartStore'
 
 const productStore = useProducts()
+// productStore.seed()
+productStore.fetchProducts()
 const cartStore = useCart()
 
-// watch([() => state.filters.priceRange, () => state.filters.category], () => {
-//   state.page = 1
-//   state.products = []
-// })
+function updateFilter(filterUpdate: FilterUpdate) {
+  productStore.updateFilter(filterUpdate)
+}
+
+function incPage() {
+  productStore.incPage()
+}
+
+function addProductToCart(productId: string) {
+  cartStore.addProductToCart(productId)
+}
+
+function removeProductFromCart(productId: string) {
+  cartStore.removeProductFromCart(productId)
+}
+
+productStore.$onAction(({ name, after, args }) => {
+  if (name === 'updateFilter' && args[0].search === undefined) {
+    after(() => {
+      productStore.page = 1
+      productStore.products = []
+      productStore.moreResults = true
+      productStore.fetchProducts()
+    })
+  } else if (name === 'incPage') {
+    after(() => {
+      productStore.fetchProducts()
+    })
+  }
+})
 </script>
 
 <template>
@@ -28,15 +47,16 @@ const cartStore = useCart()
     <Shop
       @update-filter="updateFilter"
       @add-product-to-cart="addProductToCart"
-      @load-more="state.page++"
-      :more-results="state.moreResults"
-      :products="filteredProducts"
-      :filters="state.filters"
+      @load-more="incPage"
+      :more-results="productStore.moreResults"
+      :products="productStore.filteredProducts"
+      :filters="productStore.filters"
+      :page="productStore.page"
     />
     <Cart
-      v-if="!cartEmpty"
+      v-if="!cartStore.cartEmpty"
       @remove-product-from-cart="removeProductFromCart"
-      :cart="state.cart"
+      :cart="cartStore.cart"
     />
   </div>
 </template>

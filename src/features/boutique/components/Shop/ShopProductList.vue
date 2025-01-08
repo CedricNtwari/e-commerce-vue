@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { inject, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import ShopProduct from './ShopProduct.vue'
 import type { ProductInterface } from '@/shared/interfaces'
-import { pageKey } from '@/shared/injectionKeys/pageKey'
 
-defineProps<{
+const props = defineProps<{
   products: ProductInterface[]
+  page: number
   moreResults: boolean
 }>()
-
-const page = inject(pageKey)!
 
 const scrollableDiv = ref<HTMLDivElement | null>(null)
 
@@ -18,11 +16,14 @@ const emit = defineEmits<{
   (e: 'loadMore'): void
 }>()
 
-watch(page, () => {
-  if (page.value === 1) {
-    scrollableDiv.value?.scroll(0, 0)
-  }
-})
+watch(
+  () => props.page,
+  () => {
+    if (props.page === 1) {
+      scrollableDiv.value?.scroll(0, 0)
+    }
+  },
+)
 </script>
 
 <template>

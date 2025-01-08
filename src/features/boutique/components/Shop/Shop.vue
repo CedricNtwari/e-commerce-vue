@@ -21,6 +21,7 @@ defineProps<{
   products: ProductInterface[]
   filters: FiltersInterface
   moreResults: boolean
+  page: number
 }>()
 
 const emit = defineEmits<{
@@ -61,6 +62,7 @@ const emit = defineEmits<{
         @load-more="emit('loadMore')"
         :products="products"
         :more-results="moreResults"
+        :page="page"
       />
     </div>
   </div>
