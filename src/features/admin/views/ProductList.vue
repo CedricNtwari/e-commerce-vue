@@ -2,7 +2,6 @@
 import { useAdminProductStore } from '../stores/AdminProductStore'
 
 const adminProductStore = useAdminProductStore()
-adminProductStore.fetchProducts()
 
 function tryDeleteProduct(productId: string) {
   adminProductStore.tryDeleteProduct(productId)

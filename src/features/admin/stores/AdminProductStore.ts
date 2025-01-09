@@ -1,3 +1,4 @@
+import {useProducts} from '@/features/boutique/stores/productStore'
 import type {
   ProductFormInterface,
   ProductInterface,
@@ -13,12 +14,14 @@ import { defineStore } from 'pinia'
 interface AdminProductState {
   products: ProductInterface[]
   isLoading: boolean
+  loaded: boolean
 }
 
 export const useAdminProductStore = defineStore('adminProduct', {
   state: (): AdminProductState => ({
     products: [],
     isLoading: false,
+    loaded: false,
   }),
   actions: {
     async fetchProducts() {
@@ -46,8 +49,10 @@ export const useAdminProductStore = defineStore('adminProduct', {
       }
     },
     async editProduct(productId: string, productForm: ProductFormInterface) {
+      const productStore = useProducts()
       const editedProduct = await editProduct(productId, productForm)
       if (editedProduct) {
+        productStore.needRefresh = true
         const stateProductIndex = this.products.findIndex(
           p => p._id === editedProduct._id,
         )
@@ -56,3 +61,11 @@ export const useAdminProductStore = defineStore('adminProduct', {
     },
   },
 })
+
+export function initialFetchAdminProducts() {
+  const adminStore = useAdminProductStore()
+  if (!adminStore.loaded) {
+    adminStore.fetchProducts()
+    adminStore.loaded = true
+  }
+}

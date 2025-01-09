@@ -6,8 +6,6 @@ import { useProducts } from './stores/productStore'
 import { useCart } from './stores/cartStore'
 
 const productStore = useProducts()
-// productStore.seed()
-productStore.fetchProducts()
 const cartStore = useCart()
 
 function updateFilter(filterUpdate: FilterUpdate) {
